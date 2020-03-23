@@ -23,5 +23,5 @@ public interface MessagesRestController {
 	MessageDTO saveMessage(@PathVariable(name = "ticketId") int ticketId, @RequestBody MessageDTO message);
 
 	@RequestMapping(method = RequestMethod.DELETE, path = "/{id}")
-	List<MessageDTO> deleteMessage(@PathVariable(name = "ticketId") int ticketId, @PathVariable(name = "id") int id);
+	void deleteMessage(@PathVariable(name = "ticketId") int ticketId, @PathVariable(name = "id") int id);
 }

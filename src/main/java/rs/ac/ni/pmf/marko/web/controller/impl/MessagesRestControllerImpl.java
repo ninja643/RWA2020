@@ -32,7 +32,7 @@ public class MessagesRestControllerImpl implements MessagesRestController {
 	}
 
 	@Override
-	public List<MessageDTO> deleteMessage(int ticketId, int id) {
+	public void deleteMessage(int ticketId, int id) {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Not implemented, yet");
 	}
