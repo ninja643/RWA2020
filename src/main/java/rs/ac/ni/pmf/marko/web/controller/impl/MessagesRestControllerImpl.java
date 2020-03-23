@@ -13,8 +13,10 @@ public class MessagesRestControllerImpl implements MessagesRestController {
 
 	@Override
 	public List<MessageDTO> getMessages(int ticketId) {
-		return Arrays.asList(MessageDTO.builder().id(1).ticketId(ticketId).title("Message").content("Message content")
-				.ticketId(1).build());
+		return Arrays.asList(MessageDTO.builder().id(1)
+				.ticketId(ticketId)
+				.title("Message").content("Message content")
+				.build());
 	}
 
 }
