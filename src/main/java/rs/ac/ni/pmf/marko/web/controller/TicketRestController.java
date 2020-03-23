@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import rs.ac.ni.pmf.marko.web.model.api.TicketDTO;
 
-@RequestMapping(path = "/default")
+@RequestMapping(path = "/tickets")
 public interface TicketRestController {
 
 	/*
