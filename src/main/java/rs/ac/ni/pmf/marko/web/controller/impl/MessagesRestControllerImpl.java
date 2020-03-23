@@ -19,4 +19,22 @@ public class MessagesRestControllerImpl implements MessagesRestController {
 				.build());
 	}
 
+	@Override
+	public List<MessageDTO> getMessage(int ticketId, int id) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Not implemented, yet");
+	}
+
+	@Override
+	public MessageDTO saveMessage(int ticketId, MessageDTO message) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Not implemented, yet");
+	}
+
+	@Override
+	public List<MessageDTO> deleteMessage(int ticketId, int id) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Not implemented, yet");
+	}
+
 }
