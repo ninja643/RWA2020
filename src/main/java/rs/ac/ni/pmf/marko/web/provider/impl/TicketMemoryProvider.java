@@ -15,8 +15,8 @@ public class TicketMemoryProvider implements TicketProvider {
 	public TicketMemoryProvider() {
 		tickets.put(1, TicketDTO.builder().id(1).user("Marko").title("Ticket 1").description("This is the first ticket")
 				.build());
-		tickets.put(2, TicketDTO.builder().id(2).user("Marko").title("Ticket 2").description("This is the second ticket")
-				.build());
+		tickets.put(2, TicketDTO.builder().id(2).user("Marko").title("Ticket 2")
+				.description("This is the second ticket").build());
 	}
 
 	@Override
@@ -32,6 +32,16 @@ public class TicketMemoryProvider implements TicketProvider {
 	@Override
 	public TicketDTO saveTicket(TicketDTO ticket) {
 		return tickets.put(ticket.getId(), ticket);
+	}
+
+	@Override
+	public TicketDTO updateTicket(TicketDTO ticket) {
+		return tickets.put(ticket.getId(), ticket);
+	}
+
+	@Override
+	public void deleteTicket(int id) {
+		tickets.remove(id);
 	}
 
 }
