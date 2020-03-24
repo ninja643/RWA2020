@@ -41,5 +41,5 @@ public interface TicketRestController {
 	 * DELETE /services/rest/tickets/{id}
 	 */
 	@RequestMapping(method = RequestMethod.DELETE, path = "/{id}")
-	void updateTicket(@PathVariable(name = "id") int id);
+	void deleteTicket(@PathVariable(name = "id") int id);
 }

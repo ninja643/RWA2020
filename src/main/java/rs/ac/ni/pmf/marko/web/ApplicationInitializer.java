@@ -10,15 +10,16 @@ import org.springframework.web.servlet.DispatcherServlet;
 
 import rs.ac.ni.pmf.marko.web.config.ApplicationConfiguration;
 
-public class ApplicationInitializer implements WebApplicationInitializer{
+public class ApplicationInitializer implements WebApplicationInitializer {
 
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
-		
+
 		AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext();
 		applicationContext.register(ApplicationConfiguration.class);
-		
-		Dynamic servletRegistration = servletContext.addServlet("dispatcher", new DispatcherServlet(applicationContext));
+
+		Dynamic servletRegistration = servletContext.addServlet("dispatcher",
+				new DispatcherServlet(applicationContext));
 		servletRegistration.addMapping("/services/rest/*");
 		servletRegistration.setLoadOnStartup(1);
 	}

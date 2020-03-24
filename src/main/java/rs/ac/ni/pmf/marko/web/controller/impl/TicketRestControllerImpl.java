@@ -3,8 +3,6 @@ package rs.ac.ni.pmf.marko.web.controller.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import rs.ac.ni.pmf.marko.web.controller.TicketRestController;
@@ -23,12 +21,12 @@ public class TicketRestControllerImpl implements TicketRestController{
 	}
 
 	@Override
-	public TicketDTO getTicket(@PathVariable(name = "id") int id) {
+	public TicketDTO getTicket(int id) {
 		return ticketProvider.getTicket(id);
 	}
 
 	@Override
-	public TicketDTO saveTicket(@RequestBody TicketDTO ticket) {
+	public TicketDTO saveTicket(TicketDTO ticket) {
 		return ticketProvider.saveTicket(ticket);
 	}
 
@@ -39,7 +37,7 @@ public class TicketRestControllerImpl implements TicketRestController{
 	}
 
 	@Override
-	public void updateTicket(int id) {
+	public void deleteTicket(int id) {
 		ticketProvider.deleteTicket(id);
 	}
 }
