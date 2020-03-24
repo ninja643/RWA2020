@@ -7,37 +7,37 @@ import org.springframework.web.bind.annotation.RestController;
 
 import rs.ac.ni.pmf.marko.web.controller.TicketRestController;
 import rs.ac.ni.pmf.marko.web.model.api.TicketDTO;
-import rs.ac.ni.pmf.marko.web.provider.TicketProvider;
+import rs.ac.ni.pmf.marko.web.service.TicketService;
 
 @RestController
 public class TicketRestControllerImpl implements TicketRestController{
 
 	@Autowired
-	private TicketProvider ticketProvider;
-
+	private TicketService ticketService;
+	
 	@Override
 	public List<TicketDTO> getAllTickets() {
-		return ticketProvider.getAllTickets();
+		return ticketService.getAllTickets();
 	}
 
 	@Override
 	public TicketDTO getTicket(int id) {
-		return ticketProvider.getTicket(id);
+		return ticketService.getTicket(id);
 	}
 
 	@Override
 	public TicketDTO saveTicket(TicketDTO ticket) {
-		return ticketProvider.saveTicket(ticket);
+		return ticketService.saveTicket(ticket);
 	}
 
 	@Override
 	public TicketDTO updateTicket(int id, TicketDTO ticket) {
 		// Not checking the id here, yet
-		return ticketProvider.updateTicket(ticket);
+		return ticketService.updateTicket(ticket);
 	}
 
 	@Override
 	public void deleteTicket(int id) {
-		ticketProvider.deleteTicket(id);
+		ticketService.deleteTicket(id);
 	}
 }

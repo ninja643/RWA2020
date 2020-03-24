@@ -2,17 +2,17 @@ package rs.ac.ni.pmf.marko.web.provider;
 
 import java.util.List;
 
-import rs.ac.ni.pmf.marko.web.model.api.TicketDTO;
+import rs.ac.ni.pmf.marko.web.model.entity.TicketEntity;
 
 public interface TicketProvider {
 
-	List<TicketDTO> getAllTickets();
+	List<TicketEntity> getAllTickets();
 	
-	TicketDTO getTicket(int id);
+	TicketEntity getTicket(int id);
 		
-	TicketDTO saveTicket(TicketDTO ticket);
+	TicketEntity saveTicket(TicketEntity ticket);
 	
-	TicketDTO updateTicket(TicketDTO ticket);
+	TicketEntity updateTicket(TicketEntity ticket);
 	
 	void deleteTicket(int id);
 }
