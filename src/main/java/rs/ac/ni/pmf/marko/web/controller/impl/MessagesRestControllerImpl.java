@@ -20,7 +20,7 @@ public class MessagesRestControllerImpl implements MessagesRestController {
 	}
 
 	@Override
-	public List<MessageDTO> getMessage(int ticketId, int id) {
+	public MessageDTO getMessage(int ticketId, int id) {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Not implemented, yet");
 	}

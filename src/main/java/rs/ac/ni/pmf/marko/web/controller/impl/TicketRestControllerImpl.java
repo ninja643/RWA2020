@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
 import rs.ac.ni.pmf.marko.web.controller.TicketRestController;
+import rs.ac.ni.pmf.marko.web.exception.DuplicateResourceException;
+import rs.ac.ni.pmf.marko.web.exception.ResourceNotFoundException;
 import rs.ac.ni.pmf.marko.web.model.api.TicketDTO;
 import rs.ac.ni.pmf.marko.web.service.TicketService;
 
@@ -21,12 +23,12 @@ public class TicketRestControllerImpl implements TicketRestController{
 	}
 
 	@Override
-	public TicketDTO getTicket(int id) {
+	public TicketDTO getTicket(int id) throws ResourceNotFoundException {
 		return ticketService.getTicket(id);
 	}
 
 	@Override
-	public TicketDTO saveTicket(TicketDTO ticket) {
+	public TicketDTO saveTicket(TicketDTO ticket) throws DuplicateResourceException {
 		return ticketService.saveTicket(ticket);
 	}
 
@@ -37,7 +39,7 @@ public class TicketRestControllerImpl implements TicketRestController{
 	}
 
 	@Override
-	public void deleteTicket(int id) {
+	public void deleteTicket(int id) throws ResourceNotFoundException {
 		ticketService.deleteTicket(id);
 	}
 }

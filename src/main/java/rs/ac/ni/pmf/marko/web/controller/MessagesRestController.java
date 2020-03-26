@@ -17,7 +17,7 @@ public interface MessagesRestController {
 	List<MessageDTO> getMessages(@PathVariable(name = "ticketId") int ticketId);
 
 	@RequestMapping(method = RequestMethod.GET, path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	List<MessageDTO> getMessage(@PathVariable(name = "ticketId") int ticketId, @PathVariable(name = "id") int id);
+	MessageDTO getMessage(@PathVariable(name = "ticketId") int ticketId, @PathVariable(name = "id") int id);
 
 	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	MessageDTO saveMessage(@PathVariable(name = "ticketId") int ticketId, @RequestBody MessageDTO message);
