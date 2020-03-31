@@ -18,8 +18,12 @@ public class TicketMapper {
 	}
 
 	public TicketEntity toEntity(final TicketDTO ticketDTO) {
+		return toEntity(null, ticketDTO);
+	}
+	
+	public TicketEntity toEntity(final Integer id, final TicketDTO ticketDTO) {
 		return TicketEntity.builder()
-				.id(ticketDTO.getId())
+				.id(ticketDTO.getId() != null ? ticketDTO.getId() : id)
 				.title(ticketDTO.getTitle())
 				.description(ticketDTO.getDescription())
 				.user(ticketDTO.getUser())

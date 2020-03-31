@@ -5,8 +5,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import rs.ac.ni.pmf.marko.web.provider.TicketProvider;
-import rs.ac.ni.pmf.marko.web.provider.impl.TicketMemoryProvider;
+import rs.ac.ni.pmf.marko.web.provider.DataProvider;
+import rs.ac.ni.pmf.marko.web.provider.impl.DataMemoryProvider;
 
 @Configuration
 @EnableWebMvc
@@ -14,8 +14,8 @@ import rs.ac.ni.pmf.marko.web.provider.impl.TicketMemoryProvider;
 public class ApplicationConfiguration {
 
 	@Bean
-	public TicketProvider getTicketProvider()
+	public DataProvider getTicketProvider()
 	{
-		return new TicketMemoryProvider();
+		return new DataMemoryProvider();
 	}
 }

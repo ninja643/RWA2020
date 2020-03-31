@@ -33,9 +33,8 @@ public class TicketRestControllerImpl implements TicketRestController{
 	}
 
 	@Override
-	public TicketDTO updateTicket(int id, TicketDTO ticket) {
-		// Not checking the id here, yet
-		return ticketService.updateTicket(ticket);
+	public TicketDTO updateTicket(int id, TicketDTO ticket) throws DuplicateResourceException {
+		return ticketService.updateTicket(id, ticket);
 	}
 
 	@Override

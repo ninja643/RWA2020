@@ -11,38 +11,17 @@ import rs.ac.ni.pmf.marko.web.exception.ResourceNotFoundException;
 import rs.ac.ni.pmf.marko.web.model.api.TicketDTO;
 import rs.ac.ni.pmf.marko.web.model.entity.TicketEntity;
 import rs.ac.ni.pmf.marko.web.model.mapper.TicketMapper;
-import rs.ac.ni.pmf.marko.web.provider.TicketProvider;
+import rs.ac.ni.pmf.marko.web.provider.DataProvider;
 
 @Service
 @RequiredArgsConstructor
 public class TicketService {
 
-	private final TicketProvider ticketProvider;
+	private final DataProvider ticketProvider;
 	private final TicketMapper ticketMapper;
 
 	public List<TicketDTO> getAllTickets() {
-
 		return ticketProvider.getAllTickets().stream().map(ticketMapper::toDto).collect(Collectors.toList());
-
-//		return ticketProvider.getAllTickets().stream()
-//				.map(ticketEntity -> ticketMapper.toDto(ticketEntity))
-//				.collect(Collectors.toList());
-
-		/*
-		 * return ticketProvider.getAllTickets().stream() .map(ticketEntity -> { return
-		 * ticketMapper.toDto(ticketEntity); }) .collect(Collectors.toList());
-		 */
-
-		/*
-		 * final List<TicketEntity> ticketEntities = ticketProvider.getAllTickets();
-		 * 
-		 * final List<TicketDTO> ticketDtos = new ArrayList<>();
-		 * 
-		 * for (final TicketEntity ticketEntity : ticketEntities) {
-		 * ticketDtos.add(ticketMapper.toDto(ticketEntity)); }
-		 * 
-		 * return ticketDtos;
-		 */
 	}
 
 	public TicketDTO getTicket(int id) throws ResourceNotFoundException {
@@ -50,13 +29,15 @@ public class TicketService {
 	}
 
 	public TicketDTO saveTicket(TicketDTO ticket) throws DuplicateResourceException {
-		TicketEntity savedEntity = ticketProvider.saveTicket(ticketMapper.toEntity(ticket));
+		final TicketEntity savedEntity = ticketProvider.saveTicket(ticketMapper.toEntity(ticket));
+		
 		return ticketMapper.toDto(savedEntity);
 	}
 
-	public TicketDTO updateTicket(TicketDTO ticket) {
-		// TODO Auto-generated method stub
-		return null;
+	public TicketDTO updateTicket(int id, TicketDTO ticket) throws DuplicateResourceException {
+		final TicketEntity ticketEntity = ticketMapper.toEntity(id, ticket);
+		
+		return ticketMapper.toDto(ticketProvider.updateTicket(id, ticketEntity));
 	}
 
 	public void deleteTicket(int id) throws ResourceNotFoundException {

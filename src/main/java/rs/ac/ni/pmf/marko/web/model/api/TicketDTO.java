@@ -11,7 +11,7 @@ import lombok.Value;
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class TicketDTO {
-	private int id;
+	private Integer id;
 	private String user;
 	private String title;
 	private String description;

@@ -37,7 +37,7 @@ public interface TicketRestController {
 	 * PUT /services/rest/tickets
 	 */
 	@RequestMapping(method = RequestMethod.PUT, path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	TicketDTO updateTicket(@PathVariable(name = "id") int id, @RequestBody TicketDTO ticket);
+	TicketDTO updateTicket(@PathVariable(name = "id") int id, @RequestBody TicketDTO ticket) throws DuplicateResourceException;
 
 	/*
 	 * DELETE /services/rest/tickets/{id}
