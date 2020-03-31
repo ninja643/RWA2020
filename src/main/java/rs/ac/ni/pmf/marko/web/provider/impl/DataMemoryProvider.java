@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import rs.ac.ni.pmf.marko.web.exception.DuplicateResourceException;
 import rs.ac.ni.pmf.marko.web.exception.ErrorInfo.ResourceType;
@@ -30,14 +31,7 @@ public class DataMemoryProvider implements DataProvider {
 
 	@Override
 	public TicketEntity getTicket(int id) throws ResourceNotFoundException {
-
-		final TicketEntity ticketEntity = tickets.get(id);
-
-		if (ticketEntity == null) {
-			throw new ResourceNotFoundException(ResourceType.TICKET, "Ticket with id '" + id + "' not found");
-		}
-
-		return ticketEntity;
+		return resolveTicket(id);
 	}
 
 	@Override
@@ -54,11 +48,16 @@ public class DataMemoryProvider implements DataProvider {
 
 	@Override
 	public TicketEntity updateTicket(int id, TicketEntity ticket) throws DuplicateResourceException {
-		if (ticket.getId() != id && tickets.containsKey(id)) {
+		if (ticket.getId() != id && tickets.containsKey(ticket.getId())) {
 			throw new DuplicateResourceException(ResourceType.TICKET,
 					"Cannot update ticket id to a different existing id");
 		}
 
+		if (ticket.getId() != id) {
+			// Remove the old ticket
+			tickets.remove(id);
+		}
+		
 		return tickets.put(ticket.getId(), ticket);
 	}
 
@@ -74,37 +73,22 @@ public class DataMemoryProvider implements DataProvider {
 
 	@Override
 	public List<MessageEntity> getMessages(int ticketId) throws ResourceNotFoundException {
-		final TicketEntity ticketEntity = tickets.get(ticketId);
-
-		if (ticketEntity == null) {
-			throw new ResourceNotFoundException(ResourceType.TICKET, "Ticket with id '" + ticketId + "' not found");
-		}
+		
+		final TicketEntity ticketEntity = resolveTicket(ticketId);
 
 		return ticketEntity.getMessages();
 	}
 
 	@Override
 	public MessageEntity getMessage(int ticketId, int messageId) throws ResourceNotFoundException {
-		final TicketEntity ticketEntity = tickets.get(ticketId);
-
-		if (ticketEntity == null) {
-			throw new ResourceNotFoundException(ResourceType.TICKET, "Ticket with id '" + ticketId + "' not found");
-		}
+		final TicketEntity ticketEntity = resolveTicket(ticketId);
 		
-		return ticketEntity.getMessages()
-				.stream()
-				.filter(me -> me.getId() == messageId)
-				.findFirst()
-				.orElseThrow(() -> new ResourceNotFoundException(ResourceType.MESSAGE, "Message with id '" + messageId + "' not found"));
+		return findMessage(messageId, ticketEntity.getMessages());
 	}
 
 	@Override
 	public MessageEntity addMessage(int ticketId, MessageEntity messageEntity) throws DuplicateResourceException, ResourceNotFoundException {
-		final TicketEntity ticketEntity = tickets.get(ticketId);
-
-		if (ticketEntity == null) {
-			throw new ResourceNotFoundException(ResourceType.TICKET, "Ticket with id '" + ticketId + "' not found");
-		}
+		final TicketEntity ticketEntity = resolveTicket(ticketId);
 		
 		final List<MessageEntity> messages = ticketEntity.getMessages();
 		
@@ -120,20 +104,25 @@ public class DataMemoryProvider implements DataProvider {
 
 	@Override
 	public void deleteMessage(int ticketId, int messageId) throws ResourceNotFoundException {
-		final TicketEntity ticketEntity = tickets.get(ticketId);
-
-		if (ticketEntity == null) {
-			throw new ResourceNotFoundException(ResourceType.TICKET, "Ticket with id '" + ticketId + "' not found");
-		}
+		final TicketEntity ticketEntity = resolveTicket(ticketId);
 
 		final List<MessageEntity> messages = ticketEntity.getMessages();
 		
-		final MessageEntity messageToDelete = messages.stream()
+		final MessageEntity messageToDelete = findMessage(messageId, messages);
+		
+		messages.remove(messageToDelete);
+	}
+
+	private MessageEntity findMessage(int messageId, final List<MessageEntity> messages) throws ResourceNotFoundException {
+		return messages.stream()
 				.filter(me -> me.getId() == messageId)
 				.findFirst()
 				.orElseThrow(() -> new ResourceNotFoundException(ResourceType.MESSAGE, "Message with id '" + messageId + "' not found"));
-		
-		messages.remove(messageToDelete);
+	}
+
+	private TicketEntity resolveTicket(int ticketId) throws ResourceNotFoundException {
+		return Optional.ofNullable(tickets.get(ticketId))
+				.orElseThrow(() -> new ResourceNotFoundException(ResourceType.TICKET, "Ticket with id '" + ticketId + "' not found"));
 	}
 
 }
