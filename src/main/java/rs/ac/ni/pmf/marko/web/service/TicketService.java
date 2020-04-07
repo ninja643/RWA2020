@@ -29,7 +29,7 @@ public class TicketService {
 	}
 
 	public TicketDTO saveTicket(TicketDTO ticket) throws DuplicateResourceException {
-		final TicketEntity savedEntity = ticketProvider.saveTicket(ticketMapper.toEntity(ticket));
+		final TicketEntity savedEntity = ticketProvider.saveTicket(ticketMapper.toEntity(ticket.getId(), ticket));
 		
 		return ticketMapper.toDto(savedEntity);
 	}

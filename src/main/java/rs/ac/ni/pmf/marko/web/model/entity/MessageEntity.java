@@ -1,19 +1,34 @@
 package rs.ac.ni.pmf.marko.web.model.entity;
 
-import lombok.Builder;
-import lombok.Value;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-@Value
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
 @Builder
+@Entity
+@Table(name = "messages")
+@NoArgsConstructor
+@AllArgsConstructor
 public class MessageEntity {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	Integer id;
-	
-	TicketEntity ticket;
-	
-	MessageEntity replyTo;
 	
 	String user;
 	String title;
 	String content;
+
+//	TicketEntity ticket;
+	
+//	MessageEntity replyTo;
+	
 }

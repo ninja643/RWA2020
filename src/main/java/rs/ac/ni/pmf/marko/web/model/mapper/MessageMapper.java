@@ -12,8 +12,8 @@ public class MessageMapper {
 	public MessageDTO toDto(final MessageEntity messageEntity) {
 		return MessageDTO.builder()
 				.id(messageEntity.getId())
-				.ticketId(messageEntity.getTicket().getId())
-				.replyToId(messageEntity.getReplyTo() != null ? messageEntity.getReplyTo().getId() : null)
+//				.ticketId(messageEntity.getTicket().getId())
+//				.replyToId(messageEntity.getReplyTo() != null ? messageEntity.getReplyTo().getId() : null)
 				.user(messageEntity.getUser())
 				.title(messageEntity.getTitle())
 				.content(messageEntity.getContent())
@@ -23,8 +23,8 @@ public class MessageMapper {
 	public MessageEntity toEntity(final MessageDTO messageDto, TicketEntity ticketEntity, MessageEntity replyTo) {
 		return MessageEntity.builder()
 				.id(messageDto.getId())
-				.ticket(ticketEntity)
-				.replyTo(replyTo)
+//				.ticket(ticketEntity)
+//				.replyTo(replyTo)
 				.user(messageDto.getUser())
 				.title(messageDto.getTitle())
 				.content(messageDto.getContent())
