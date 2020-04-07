@@ -11,7 +11,7 @@ import lombok.Value;
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 @Builder
 public class MessageDTO {
-	int id;
+	Integer id;
 	int ticketId;
 	Integer replyToId;
 	String user;

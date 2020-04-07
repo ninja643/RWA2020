@@ -97,9 +97,18 @@ public class DataMemoryProvider implements DataProvider {
 			throw new DuplicateResourceException(ResourceType.MESSAGE, "Message with id '" + messageEntity.getId() + "' already exists in ticket '" + ticketId + "'");
 		}
 		
-		messages.add(messageEntity);
+		final MessageEntity entityToSave = MessageEntity.builder()
+				.id(messageEntity.getId())
+				.ticket(ticketEntity)
+				.replyTo(null)
+				.user(messageEntity.getUser())
+				.title(messageEntity.getTitle())
+				.content(messageEntity.getContent())
+				.build(); 
 		
-		return messageEntity;
+		messages.add(entityToSave);
+		
+		return entityToSave;
 	}
 
 	@Override

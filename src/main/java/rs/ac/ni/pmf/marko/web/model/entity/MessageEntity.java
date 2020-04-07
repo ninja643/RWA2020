@@ -7,7 +7,7 @@ import lombok.Value;
 @Builder
 public class MessageEntity {
 	
-	int id;
+	Integer id;
 	
 	TicketEntity ticket;
 	
