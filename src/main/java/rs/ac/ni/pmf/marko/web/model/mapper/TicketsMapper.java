@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 import rs.ac.ni.pmf.marko.web.model.api.TicketDTO;
 import rs.ac.ni.pmf.marko.web.model.entity.TicketEntity;
+import rs.ac.ni.pmf.marko.web.model.entity.UserEntity;
 
 @Component
 public class TicketsMapper {
@@ -13,16 +14,16 @@ public class TicketsMapper {
 				.id(ticketEntity.getId())
 				.title(ticketEntity.getTitle())
 				.description(ticketEntity.getDescription())
-				.user(ticketEntity.getUser())
+				.username(ticketEntity.getUser().getUsername())
 				.build();
 	}
 
-	public TicketEntity toEntity(final TicketDTO ticketDTO) {
+	public TicketEntity toEntity(final TicketDTO ticketDTO, final UserEntity userEntity) {
 		return TicketEntity.builder()
 				.id(ticketDTO.getId())
 				.title(ticketDTO.getTitle())
 				.description(ticketDTO.getDescription())
-				.user(ticketDTO.getUser())
+				.user(userEntity)
 				.build();
 	}
 }

@@ -13,14 +13,17 @@ import rs.ac.ni.pmf.marko.web.exception.ResourceException;
 import rs.ac.ni.pmf.marko.web.exception.ResourceNotFoundException;
 import rs.ac.ni.pmf.marko.web.model.api.TicketDTO;
 import rs.ac.ni.pmf.marko.web.model.entity.TicketEntity;
+import rs.ac.ni.pmf.marko.web.model.entity.UserEntity;
 import rs.ac.ni.pmf.marko.web.model.mapper.TicketsMapper;
 import rs.ac.ni.pmf.marko.web.repository.TicketsRepository;
+import rs.ac.ni.pmf.marko.web.repository.UsersRepository;
 
 @Service
 @RequiredArgsConstructor
 public class TicketsService {
 
 	private final TicketsRepository ticketsRepository;
+	private final UsersRepository usersRepository;
 	private final TicketsMapper ticketsMapper;
 
 	public List<TicketDTO> getAllTickets() {
@@ -33,7 +36,16 @@ public class TicketsService {
 		return ticketsMapper.toDto(ticketEntity);
 	}
 
-	public TicketDTO saveTicket(final TicketDTO ticketDto) throws DuplicateResourceException {
+	public TicketDTO saveTicket(final TicketDTO ticketDto) throws ResourceException, BadRequestException {
+		final String username = ticketDto.getUsername();
+		
+		if (username == null || username.trim().isEmpty()) {
+			throw new BadRequestException("Username cannot be null or empty!");
+		}
+
+		final UserEntity userEntity = usersRepository.findById(username)
+				.orElseThrow(() -> new ResourceNotFoundException(ResourceType.USER, "User '" + username + "' does not exist"));
+
 		final Integer ticketId = ticketDto.getId();
 
 		if (ticketId != null && ticketsRepository.existsById(ticketId)) {
@@ -41,7 +53,7 @@ public class TicketsService {
 					"Ticket with id '" + ticketId + "' already exists");
 		}
 
-		final TicketEntity ticketEntity = ticketsMapper.toEntity(ticketDto);
+		final TicketEntity ticketEntity = ticketsMapper.toEntity(ticketDto, userEntity);
 		final TicketEntity savedEntity = ticketsRepository.save(ticketEntity);
 
 		return ticketsMapper.toDto(savedEntity);

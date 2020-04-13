@@ -29,7 +29,10 @@ public class MessageEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 
-	private String user;
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private UserEntity user;
+	
 	private String title;
 	private String content;
 

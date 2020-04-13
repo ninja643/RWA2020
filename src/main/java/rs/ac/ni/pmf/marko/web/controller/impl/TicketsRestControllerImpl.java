@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import rs.ac.ni.pmf.marko.web.controller.TicketsRestController;
 import rs.ac.ni.pmf.marko.web.exception.BadRequestException;
-import rs.ac.ni.pmf.marko.web.exception.DuplicateResourceException;
 import rs.ac.ni.pmf.marko.web.exception.ResourceException;
 import rs.ac.ni.pmf.marko.web.exception.ResourceNotFoundException;
 import rs.ac.ni.pmf.marko.web.model.api.TicketDTO;
@@ -30,7 +29,7 @@ public class TicketsRestControllerImpl implements TicketsRestController {
 	}
 
 	@Override
-	public TicketDTO saveTicket(final TicketDTO ticket) throws DuplicateResourceException {
+	public TicketDTO saveTicket(final TicketDTO ticket) throws ResourceException, BadRequestException {
 		return ticketsService.saveTicket(ticket);
 	}
 

@@ -12,9 +12,11 @@ import rs.ac.ni.pmf.marko.web.exception.ResourceNotFoundException;
 import rs.ac.ni.pmf.marko.web.model.api.MessageDTO;
 import rs.ac.ni.pmf.marko.web.model.entity.MessageEntity;
 import rs.ac.ni.pmf.marko.web.model.entity.TicketEntity;
+import rs.ac.ni.pmf.marko.web.model.entity.UserEntity;
 import rs.ac.ni.pmf.marko.web.model.mapper.MessagesMapper;
 import rs.ac.ni.pmf.marko.web.repository.MessagesRepository;
 import rs.ac.ni.pmf.marko.web.repository.TicketsRepository;
+import rs.ac.ni.pmf.marko.web.repository.UsersRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +25,7 @@ public class MessagesService {
 	private final TicketsRepository ticketsRepository;
 	private final MessagesRepository messagesRepository;
 	private final MessagesMapper messagesMapper;
+	private final UsersRepository usersRepository;
 
 	public List<MessageDTO> getMessages(final int ticketId) throws ResourceNotFoundException {
 
@@ -42,8 +45,11 @@ public class MessagesService {
 				.orElseThrow(() -> new ResourceNotFoundException(ResourceType.TICKET,
 						"Ticket with id '" + ticketId + "' not found"));
 
+		final UserEntity userEntity = usersRepository.findById(message.getUsername())
+				.orElseThrow(() -> new ResourceNotFoundException(ResourceType.USER, "User '" + message.getUsername() + "' not found"));
+
 		final MessageEntity replyToEntity = replyToId != null ? messagesRepository.findById(replyToId).orElse(null) : null;
-		final MessageEntity messageEntity = messagesMapper.toEntity(message, ticketEntity, replyToEntity);
+		final MessageEntity messageEntity = messagesMapper.toEntity(message, userEntity, ticketEntity, replyToEntity);
 		final MessageEntity savedEntity = messagesRepository.save(messageEntity);
 
 //		ticketEntity.getMessages().add(messageEntity);

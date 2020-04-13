@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import rs.ac.ni.pmf.marko.web.exception.BadRequestException;
-import rs.ac.ni.pmf.marko.web.exception.DuplicateResourceException;
 import rs.ac.ni.pmf.marko.web.exception.ResourceException;
 import rs.ac.ni.pmf.marko.web.exception.ResourceNotFoundException;
 import rs.ac.ni.pmf.marko.web.model.api.TicketDTO;
@@ -27,7 +26,7 @@ public interface TicketsRestController {
 
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@RequestMapping(method = RequestMethod.POST, path = "", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	TicketDTO saveTicket(@RequestBody TicketDTO ticket) throws DuplicateResourceException;
+	TicketDTO saveTicket(@RequestBody TicketDTO ticket) throws ResourceException, BadRequestException;
 
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	@RequestMapping(method = RequestMethod.PUT, path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)

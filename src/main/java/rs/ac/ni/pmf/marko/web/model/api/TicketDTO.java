@@ -12,7 +12,7 @@ import lombok.Value;
 @AllArgsConstructor
 public class TicketDTO {
 	Integer id;
-	String user;
+	String username;
 	String title;
 	String description;
 }

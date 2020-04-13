@@ -18,6 +18,7 @@ public class ErrorInfo {
 
 	public enum ResourceType {
 		TICKET,
-		MESSAGE
+		MESSAGE,
+		USER
 	}
 }
