@@ -8,14 +8,14 @@ import lombok.Value;
 public class ErrorInfo {
 	private ErrorCode errorCode;
 	private ResourceType resourceType;
-	
+
 	private String message;
-	
+
 	public enum ErrorCode {
 		NOT_FOUND,
 		DUPLICATE
 	}
-	
+
 	public enum ResourceType {
 		TICKET,
 		MESSAGE

@@ -7,39 +7,52 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import rs.ac.ni.pmf.marko.web.exception.DuplicateResourceException;
+import rs.ac.ni.pmf.marko.web.exception.ErrorInfo.ResourceType;
 import rs.ac.ni.pmf.marko.web.exception.ResourceNotFoundException;
 import rs.ac.ni.pmf.marko.web.model.api.MessageDTO;
 import rs.ac.ni.pmf.marko.web.model.entity.MessageEntity;
 import rs.ac.ni.pmf.marko.web.model.entity.TicketEntity;
-import rs.ac.ni.pmf.marko.web.model.mapper.MessageMapper;
-import rs.ac.ni.pmf.marko.web.provider.DataProvider;
+import rs.ac.ni.pmf.marko.web.model.mapper.MessagesMapper;
+import rs.ac.ni.pmf.marko.web.repository.MessagesRepository;
+import rs.ac.ni.pmf.marko.web.repository.TicketsRepository;
 
 @Service
 @RequiredArgsConstructor
 public class MessagesService {
 
-	private final DataProvider dataProvider;
-	private final MessageMapper messageMapper;
-	
-	public List<MessageDTO> getMessages(int ticketId) throws ResourceNotFoundException {
-		
-		return dataProvider.getMessages(ticketId)
-				.stream()
-				.map(messageMapper::toDto)
+	private final TicketsRepository ticketsRepository;
+	private final MessagesRepository messagesRepository;
+	private final MessagesMapper messagesMapper;
+
+	public List<MessageDTO> getMessages(final int ticketId) throws ResourceNotFoundException {
+
+		if (!ticketsRepository.existsById(ticketId)) {
+			throw new ResourceNotFoundException(ResourceType.TICKET, "Ticket with id '" + ticketId + "' not found");
+		}
+
+		return messagesRepository.findByTicketId(ticketId).stream().map(messagesMapper::toDto)
 				.collect(Collectors.toList());
 	}
 
-	public MessageDTO getMesssage(int ticketId, int messageId) throws ResourceNotFoundException {
-		return messageMapper.toDto(dataProvider.getMessage(ticketId, messageId));
+//	@Transactional
+	public MessageDTO saveMessage(final int ticketId, final MessageDTO message, final Integer replyToId)
+			throws DuplicateResourceException, ResourceNotFoundException {
+
+		final TicketEntity ticketEntity = ticketsRepository.findById(ticketId)
+				.orElseThrow(() -> new ResourceNotFoundException(ResourceType.TICKET,
+						"Ticket with id '" + ticketId + "' not found"));
+
+		final MessageEntity replyToEntity = replyToId != null ? messagesRepository.findById(replyToId).orElse(null) : null;
+		final MessageEntity messageEntity = messagesMapper.toEntity(message, ticketEntity, replyToEntity);
+		final MessageEntity savedEntity = messagesRepository.save(messageEntity);
+
+//		ticketEntity.getMessages().add(messageEntity);
+//		ticketsRepository.save(ticketEntity);
+
+		return messagesMapper.toDto(savedEntity);
 	}
 
-	public MessageDTO saveMessage(int ticketId, MessageDTO message) throws DuplicateResourceException, ResourceNotFoundException {
-		final TicketEntity ticketEntity = dataProvider.getTicket(ticketId);
-		final MessageEntity savedEntity = dataProvider.addMessage(ticketId, messageMapper.toEntity(message, ticketEntity, null));
-		return messageMapper.toDto(savedEntity);
-	}
+	public void deleteMessage(final int ticketId, final int messageId) throws ResourceNotFoundException {
 
-	public void deleteMessage(int ticketId, int messageId) throws ResourceNotFoundException {
-		dataProvider.deleteMessage(ticketId, messageId);
 	}
 }

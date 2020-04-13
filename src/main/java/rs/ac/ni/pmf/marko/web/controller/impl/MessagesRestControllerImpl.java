@@ -18,23 +18,18 @@ public class MessagesRestControllerImpl implements MessagesRestController {
 	private final MessagesService messagesService;
 
 	@Override
-	public List<MessageDTO> getMessages(int ticketId) throws ResourceNotFoundException {
+	public List<MessageDTO> getMessages(final int ticketId) throws ResourceNotFoundException {
 		return messagesService.getMessages(ticketId);
 	}
 
 	@Override
-	public MessageDTO getMessage(int ticketId, int messageId) throws ResourceNotFoundException {
-		return messagesService.getMesssage(ticketId, messageId);
-	}
-
-	@Override
-	public MessageDTO saveMessage(int ticketId, MessageDTO message)
+	public MessageDTO saveMessage(final int ticketId, final MessageDTO message, final Integer replyToId)
 			throws DuplicateResourceException, ResourceNotFoundException {
-		return messagesService.saveMessage(ticketId, message);
+		return messagesService.saveMessage(ticketId, message, replyToId);
 	}
 
 	@Override
-	public void deleteMessage(int ticketId, int messageId) throws ResourceNotFoundException {
+	public void deleteMessage(final int ticketId, final int messageId) throws ResourceNotFoundException {
 		messagesService.deleteMessage(ticketId, messageId);
 	}
 

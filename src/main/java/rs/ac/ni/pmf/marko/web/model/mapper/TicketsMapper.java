@@ -6,8 +6,8 @@ import rs.ac.ni.pmf.marko.web.model.api.TicketDTO;
 import rs.ac.ni.pmf.marko.web.model.entity.TicketEntity;
 
 @Component
-public class TicketMapper {
-	
+public class TicketsMapper {
+
 	public TicketDTO toDto(final TicketEntity ticketEntity) {
 		return TicketDTO.builder()
 				.id(ticketEntity.getId())
@@ -18,12 +18,8 @@ public class TicketMapper {
 	}
 
 	public TicketEntity toEntity(final TicketDTO ticketDTO) {
-		return toEntity(null, ticketDTO);
-	}
-	
-	public TicketEntity toEntity(final Integer id, final TicketDTO ticketDTO) {
 		return TicketEntity.builder()
-				.id(ticketDTO.getId() != null ? ticketDTO.getId() : id)
+				.id(ticketDTO.getId())
 				.title(ticketDTO.getTitle())
 				.description(ticketDTO.getDescription())
 				.user(ticketDTO.getUser())

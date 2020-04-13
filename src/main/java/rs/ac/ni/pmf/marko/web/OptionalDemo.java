@@ -18,8 +18,8 @@ public class OptionalDemo {
 
 	private static List<Pair> elements = Arrays.asList(new Pair(1, 2), new Pair(1, 3), new Pair(3, 4));
 
-	public Optional<Pair> findPair(int a, List<Pair> pairs) {
-		for (Pair pair : pairs) {
+	public Optional<Pair> findPair(final int a, final List<Pair> pairs) {
+		for (final Pair pair : pairs) {
 			if (pair.getA() == a) {
 				return Optional.of(pair);
 			}
@@ -28,16 +28,16 @@ public class OptionalDemo {
 		return Optional.empty();
 	}
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 //		OptionalDemo demo = new OptionalDemo();
 
-		int a = 14;
+		final int a = 14;
 
-		Pair pair = elements.stream()
-			.filter(p -> p.getA() == a)
-			.findFirst()
-			.orElseThrow(() -> new IllegalArgumentException("Pair not found"));
-		log.info(pair.toString());
+		final Pair pair = OptionalDemo.elements.stream()
+				.filter(p -> p.getA() == a)
+				.findFirst()
+				.orElseThrow(() -> new IllegalArgumentException("Pair not found"));
+		OptionalDemo.log.info(pair.toString());
 
 //		elements.stream()
 //			.filter(pair -> pair.getA() == a)
@@ -53,7 +53,7 @@ public class OptionalDemo {
 //		log.info(pair.toString());
 
 //		Optional<Pair> optionalPair = demo.findPair(a, elements);
-//		
+//
 //		if (optionalPair.isPresent()) {
 //			Pair pair = optionalPair.get();
 //			log.info(pair.toString());

@@ -14,19 +14,19 @@ import rs.ac.ni.pmf.marko.web.exception.ResourceNotFoundException;
 @ControllerAdvice
 @ResponseBody
 public class ErrorController {
-	
+
 	@ExceptionHandler(ResourceNotFoundException.class)
 	@ResponseStatus(code = HttpStatus.NOT_FOUND)
-	public ErrorInfo handleNotFoundException(ResourceNotFoundException e) {
+	public ErrorInfo handleNotFoundException(final ResourceNotFoundException e) {
 		return ErrorInfo.builder()
 				.errorCode(ErrorCode.NOT_FOUND)
 				.resourceType(e.getResourceType())
 				.message(e.getMessage()).build();
 	}
-	
+
 	@ExceptionHandler(DuplicateResourceException.class)
 	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
-	public ErrorInfo handleDuplicateResourceException(DuplicateResourceException e) {
+	public ErrorInfo handleDuplicateResourceException(final DuplicateResourceException e) {
 		return ErrorInfo.builder()
 				.errorCode(ErrorCode.DUPLICATE)
 				.resourceType(e.getResourceType())
