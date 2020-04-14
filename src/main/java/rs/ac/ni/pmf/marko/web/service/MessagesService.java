@@ -22,17 +22,18 @@ import rs.ac.ni.pmf.marko.web.repository.UsersRepository;
 @RequiredArgsConstructor
 public class MessagesService {
 
-	private final TicketsRepository ticketsRepository;
 	private final MessagesRepository messagesRepository;
-	private final MessagesMapper messagesMapper;
+	private final TicketsRepository ticketsRepository;
 	private final UsersRepository usersRepository;
+
+	private final MessagesMapper messagesMapper;
 
 	public List<MessageDTO> getMessages(final int ticketId) throws ResourceNotFoundException {
 
 		if (!ticketsRepository.existsById(ticketId)) {
 			throw new ResourceNotFoundException(ResourceType.TICKET, "Ticket with id '" + ticketId + "' not found");
 		}
-
+		
 		return messagesRepository.findByTicketId(ticketId).stream().map(messagesMapper::toDto)
 				.collect(Collectors.toList());
 	}
@@ -48,7 +49,10 @@ public class MessagesService {
 		final UserEntity userEntity = usersRepository.findById(message.getUsername())
 				.orElseThrow(() -> new ResourceNotFoundException(ResourceType.USER, "User '" + message.getUsername() + "' not found"));
 
-		final MessageEntity replyToEntity = replyToId != null ? messagesRepository.findById(replyToId).orElse(null) : null;
+		final MessageEntity replyToEntity = replyToId != null ? messagesRepository.findById(replyToId)
+				.orElseThrow(() -> new ResourceNotFoundException(ResourceType.MESSAGE, "Cannot reply to non existing message '" + replyToId + "'"))
+				: null;
+				
 		final MessageEntity messageEntity = messagesMapper.toEntity(message, userEntity, ticketEntity, replyToEntity);
 		final MessageEntity savedEntity = messagesRepository.save(messageEntity);
 

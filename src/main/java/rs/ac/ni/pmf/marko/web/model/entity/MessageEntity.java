@@ -30,7 +30,7 @@ public class MessageEntity {
 	private Integer id;
 
 	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "username")
 	private UserEntity user;
 	
 	private String title;

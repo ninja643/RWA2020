@@ -42,7 +42,8 @@ public class UsersService {
 		}
 
 		final UserEntity userEntity = usersMapper.toEntity(userDto);
-		return usersMapper.toDto(usersRepository.save(userEntity));
+		UserEntity savedEntity = usersRepository.save(userEntity);
+		return usersMapper.toDto(savedEntity);
 	}
 	
 	public void deleteUser(final String username) throws ResourceNotFoundException {

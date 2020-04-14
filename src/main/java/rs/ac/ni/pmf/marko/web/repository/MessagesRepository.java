@@ -11,5 +11,4 @@ import rs.ac.ni.pmf.marko.web.model.entity.MessageEntity;
 public interface MessagesRepository extends CrudRepository<MessageEntity, Integer> {
 
 	List<MessageEntity> findByTicketId(int ticketId);
-
 }
