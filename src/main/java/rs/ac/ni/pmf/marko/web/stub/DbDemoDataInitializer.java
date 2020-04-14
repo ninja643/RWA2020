@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import rs.ac.ni.pmf.marko.web.model.api.MessageDTO;
 import rs.ac.ni.pmf.marko.web.model.api.TicketDTO;
 import rs.ac.ni.pmf.marko.web.model.api.UserDTO;
+import rs.ac.ni.pmf.marko.web.search.UserSearchOptions;
 import rs.ac.ni.pmf.marko.web.service.MessagesService;
 import rs.ac.ni.pmf.marko.web.service.TicketsService;
 import rs.ac.ni.pmf.marko.web.service.UsersService;
@@ -72,5 +73,11 @@ public class DbDemoDataInitializer implements InitializingBean {
 //		final Integer savedTicketId = savedTicketDTO.getId();
 //		final MessageDTO savedMessage1 = messagesService.saveMessage(savedTicketId, messageDto1, null);
 //		messagesService.saveMessage(savedTicketId, messageDto2, savedMessage1.getId());
+		
+		UserSearchOptions searchOptions = UserSearchOptions.builder()
+				.firstNameFilter("m")
+				.build();
+		usersService.getAllUsers(searchOptions).stream().map(UserDTO::toString).forEach(user -> System.out.println(user));
+		
 	}
 }
