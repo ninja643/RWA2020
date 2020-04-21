@@ -35,29 +35,35 @@ public class UsersSearchSpecification implements Specification<UserEntity> {
 		final Path<String> lastName = root.get(UserEntity_.lastName);
 		final Path<String> username = root.get(UserEntity_.username);
 
+		/*
+		 * select u.* from users u 
+		 * where lower(u.first_name) like "%firstNameFilter%" and lower(u.last_name) like "%lastNameFilter%"
+		 * 
+		 */
 		final String firstNameFilter = searchOptions.getFirstNameFilter();
 
 		if (firstNameFilter != null && !firstNameFilter.trim().isEmpty()) {
-			predicates.add(criteriaBuilder.like(criteriaBuilder.lower(firstName), "%" + firstNameFilter + "%"));
+			predicates.add(criteriaBuilder.like(criteriaBuilder.lower(firstName), "%" + firstNameFilter.toLowerCase() + "%"));
 		}
 
 		final String lastNameFilter = searchOptions.getLastNameFilter();
 
 		if (lastNameFilter != null && !lastNameFilter.trim().isEmpty()) {
-			predicates.add(criteriaBuilder.like(criteriaBuilder.lower(lastName), "%" + lastNameFilter + "%"));
+			predicates.add(criteriaBuilder.like(criteriaBuilder.lower(lastName), "%" + lastNameFilter.toLowerCase() + "%"));
 		}
 
 		if (searchOptions.getMinTicketsCount() != null) {
+			
 			final Join<UserEntity, TicketEntity> ticketsJoin = root.join(UserEntity_.tickets, JoinType.INNER);
+			
 			final Path<Integer> ticketId = ticketsJoin.get(TicketEntity_.id);
-
+			
 			query.groupBy(username);
 			query.having(criteriaBuilder.ge(criteriaBuilder.count(ticketId), searchOptions.getMinTicketsCount()));
 		}
 
 		query.orderBy(criteriaBuilder.asc(lastName), criteriaBuilder.asc(firstName));
-		
+
 		return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
 	}
-
 }

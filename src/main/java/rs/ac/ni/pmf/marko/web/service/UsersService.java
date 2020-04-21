@@ -41,14 +41,15 @@ public class UsersService {
 
 	private final UsersRepository usersRepository;
 	private final UsersMapper usersMapper;
+	
 	private final EntityManager entityManager;
 
 	public Page<UserDTO> getAllUsers(final UsersSearchOptions searchOptions) {
 
 		final PageRequest pageRequest;
-
+		
 		if (searchOptions.getPage() != null) {
-			pageRequest = PageRequest.of(searchOptions.getPage(), searchOptions.getSize() != 0 ? searchOptions.getSize() : DEFAULT_PAGE_SIZE);
+			pageRequest = PageRequest.of(searchOptions.getPage(), searchOptions.getSize() != null ? searchOptions.getSize() : DEFAULT_PAGE_SIZE);
 		}
 		else {
 			pageRequest = PageRequest.of(0, Integer.MAX_VALUE);
@@ -86,9 +87,10 @@ public class UsersService {
 		usersRepository.deleteById(username);
 	}
 
-	public List<UserTicketLiteDTO> getTicketsLite(final String username/* , final String repliedToUser */) {
+	public List<UserTicketLiteDTO> getTicketsLite(final String username) {
 		
 		final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		
 		final CriteriaQuery<UserTicketLiteDTO> cq = cb.createQuery(UserTicketLiteDTO.class);
 		
 		final Root<UserEntity> root = cq.from(UserEntity.class);
@@ -103,10 +105,9 @@ public class UsersService {
 		
 		cq.multiselect(usernamePath, ticketTitle);
 		cq.where(predicates.toArray(new Predicate[predicates.size()]));
+//		cq.where(cb.equal(usernamePath, username));
 		
-		final List<UserTicketLiteDTO> result = entityManager.createQuery(cq).getResultList();
-		
-		return result;
+		return entityManager.createQuery(cq).getResultList();
 	}
 
 	public long countMessages(String username) {
