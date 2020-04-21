@@ -9,6 +9,8 @@ public class MessageEntity_ {
 	public static volatile SingularAttribute<MessageEntity, String> title;
 	public static volatile SingularAttribute<MessageEntity, String> content;
 
+	public static volatile SingularAttribute<MessageEntity, UserEntity> user;
+	
 	public static volatile SingularAttribute<MessageEntity, TicketEntity> ticket;
 	public static volatile SingularAttribute<MessageEntity, MessageEntity> replyTo;
 }
