@@ -2,9 +2,9 @@ package rs.ac.ni.pmf.marko.web.controller.impl;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.RequiredArgsConstructor;
 import rs.ac.ni.pmf.marko.web.controller.TicketsRestController;
 import rs.ac.ni.pmf.marko.web.exception.BadRequestException;
 import rs.ac.ni.pmf.marko.web.exception.ResourceException;
@@ -13,10 +13,10 @@ import rs.ac.ni.pmf.marko.web.model.api.TicketDTO;
 import rs.ac.ni.pmf.marko.web.service.TicketsService;
 
 @RestController
+@RequiredArgsConstructor
 public class TicketsRestControllerImpl implements TicketsRestController {
 
-	@Autowired
-	private TicketsService ticketsService;
+	private final TicketsService ticketsService;
 
 	@Override
 	public List<TicketDTO> getAllTickets() {
