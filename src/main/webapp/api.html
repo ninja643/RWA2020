@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>My REST API Documentation</title>
+<style type="text/css">
+body, html {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0
+}
+
+.frame-container {
+	display: flex;
+	width: 100%;
+	height: 100%;
+	flex-direction: column;
+	overflow: hidden;
+}
+
+.frame-container iframe {
+	flex-grow: 1;
+	border: none;
+	margin: 0;
+	padding: 0;
+}
+</style>
+</head>
+<body>
+	<div class="frame-container">
+		<iframe src="services/rest/swagger-ui.html"></iframe>
+	</div>
+
+</body>
+</html>

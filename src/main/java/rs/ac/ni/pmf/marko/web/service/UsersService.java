@@ -44,6 +44,12 @@ public class UsersService {
 	
 	private final EntityManager entityManager;
 
+	/**
+	 * Get the list of all users that satisfy the given conditions
+	 * 
+	 * @param searchOptions
+	 * @return
+	 */
 	public Page<UserDTO> getAllUsers(final UsersSearchOptions searchOptions) {
 
 		final PageRequest pageRequest;
