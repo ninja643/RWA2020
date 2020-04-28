@@ -34,7 +34,9 @@ public class MessagesService {
 			throw new ResourceNotFoundException(ResourceType.TICKET, "Ticket with id '" + ticketId + "' not found");
 		}
 		
-		return messagesRepository.findByTicketId(ticketId).stream().map(messagesMapper::toDto)
+		return messagesRepository.findByTicketId(ticketId)
+				.stream()
+				.map(messagesMapper::toDto)
 				.collect(Collectors.toList());
 	}
 
