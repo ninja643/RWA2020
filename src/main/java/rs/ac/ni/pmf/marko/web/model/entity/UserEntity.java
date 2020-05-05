@@ -1,5 +1,6 @@
 package rs.ac.ni.pmf.marko.web.model.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -32,6 +33,7 @@ public class UserEntity {
 	@Column(name = "last_name")
 	private String lastName;
 
+	@Builder.Default
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-	private List<TicketEntity> tickets;
+	private List<TicketEntity> tickets = new ArrayList<>();
 }
