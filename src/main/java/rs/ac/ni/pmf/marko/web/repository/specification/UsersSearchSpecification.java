@@ -54,7 +54,7 @@ public class UsersSearchSpecification implements Specification<UserEntity> {
 
 		if (searchOptions.getMinTicketsCount() != null) {
 			
-			final Join<UserEntity, TicketEntity> ticketsJoin = root.join(UserEntity_.tickets, JoinType.INNER);
+			final Join<UserEntity, TicketEntity> ticketsJoin = root.join(UserEntity_.tickets, JoinType.LEFT);
 			
 			final Path<Integer> ticketId = ticketsJoin.get(TicketEntity_.id);
 			
