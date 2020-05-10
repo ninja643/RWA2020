@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import rs.ac.ni.pmf.marko.web.controller.UsersRestController;
+import rs.ac.ni.pmf.marko.web.exception.DuplicateResourceException;
 import rs.ac.ni.pmf.marko.web.model.UsersSearchOptions;
 import rs.ac.ni.pmf.marko.web.model.api.UserDTO;
 import rs.ac.ni.pmf.marko.web.model.api.UserTicketLiteDTO;
@@ -50,6 +51,11 @@ public class UsersRestControllerImpl implements UsersRestController {
 	@Override
 	public long getMessagesCount(String username) {
 		return usersService.countMessages(username);
+	}
+
+	@Override
+	public UserDTO addUser(UserDTO user) throws DuplicateResourceException {
+		return usersService.addUser(user);
 	}
 
 }

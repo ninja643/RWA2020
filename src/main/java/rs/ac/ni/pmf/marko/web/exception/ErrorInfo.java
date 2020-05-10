@@ -12,11 +12,14 @@ public class ErrorInfo {
 	private String message;
 
 	public enum ErrorCode {
+		AUTHENTICATION_FAILED,
+		UNAUTORIZED,
 		NOT_FOUND,
 		DUPLICATE
 	}
 
 	public enum ResourceType {
+		ACCESS,
 		TICKET,
 		MESSAGE,
 		USER
