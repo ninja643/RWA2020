@@ -3,7 +3,7 @@ package rs.ac.ni.pmf.marko.web.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
@@ -12,6 +12,7 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -41,8 +42,7 @@ public class UsersService {
 
 	private final UsersRepository usersRepository;
 	private final UsersMapper usersMapper;
-	
-	private final EntityManager entityManager;
+	private final EntityManagerFactory entityManagerFactory;
 
 	/**
 	 * Get the list of all users that satisfy the given conditions
@@ -53,7 +53,7 @@ public class UsersService {
 	public Page<UserDTO> getAllUsers(final UsersSearchOptions searchOptions) {
 
 		final PageRequest pageRequest;
-		
+
 		if (searchOptions.getPage() != null) {
 			pageRequest = PageRequest.of(searchOptions.getPage(), searchOptions.getSize() != null ? searchOptions.getSize() : DEFAULT_PAGE_SIZE);
 		}
@@ -94,41 +94,41 @@ public class UsersService {
 	}
 
 	public List<UserTicketLiteDTO> getTicketsLite(final String username) {
-		
-		final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-		
+
+		final CriteriaBuilder cb = entityManagerFactory.getCriteriaBuilder();
+
 		final CriteriaQuery<UserTicketLiteDTO> cq = cb.createQuery(UserTicketLiteDTO.class);
-		
+
 		final Root<UserEntity> root = cq.from(UserEntity.class);
 		final Join<UserEntity, TicketEntity> ticketsJoin = root.join(UserEntity_.tickets);
-		
+
 		final Path<String> usernamePath = root.get(UserEntity_.username);
 		final Path<String> ticketTitle = ticketsJoin.get(TicketEntity_.title);
-		
+
 		final List<Predicate> predicates = new ArrayList<>();
-		
+
 		predicates.add(cb.equal(usernamePath, username));
-		
+
 		cq.multiselect(usernamePath, ticketTitle);
 		cq.where(predicates.toArray(new Predicate[predicates.size()]));
 //		cq.where(cb.equal(usernamePath, username));
-		
-		return entityManager.createQuery(cq).getResultList();
+
+		return entityManagerFactory.createEntityManager().createQuery(cq).getResultList();
 	}
 
 	public long countMessages(String username) {
-		
-		final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+
+		final CriteriaBuilder cb = entityManagerFactory.getCriteriaBuilder();
 		final CriteriaQuery<Long> cq = cb.createQuery(Long.class);
-		
+
 		final Root<MessageEntity> root = cq.from(MessageEntity.class);
 		final Join<MessageEntity, UserEntity> usersJoin = root.join(MessageEntity_.user, JoinType.INNER);
 
 		final Path<String> usernamePath = usersJoin.get(UserEntity_.username);
-		
+
 		cq.select(cb.count(root));
 		cq.where(cb.equal(usernamePath, username));
-		
-		return entityManager.createQuery(cq).getSingleResult();
+
+		return entityManagerFactory.createEntityManager().createQuery(cq).getSingleResult();
 	}
 }

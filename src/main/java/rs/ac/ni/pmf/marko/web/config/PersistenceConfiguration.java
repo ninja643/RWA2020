@@ -37,13 +37,13 @@ public class PersistenceConfiguration {
 	}
 
 	@Bean
-	public LocalContainerEntityManagerFactoryBean entityManagerFactory(final DataSource dataSource,
-			final Environment env) {
+	public LocalContainerEntityManagerFactoryBean entityManagerFactory(final DataSource dataSource, final Environment env) {
 
 		final LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
 		entityManagerFactory.setDataSource(dataSource);
 		entityManagerFactory.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 		entityManagerFactory.setPackagesToScan("rs.ac.ni.pmf.marko.web.model.entity");
+		entityManagerFactory.setPersistenceUnitName("EMF");
 
 		final Properties jpaProperties = new Properties();
 
