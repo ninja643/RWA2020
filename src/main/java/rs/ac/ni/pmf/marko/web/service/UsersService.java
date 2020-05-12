@@ -3,7 +3,8 @@ package rs.ac.ni.pmf.marko.web.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import rs.ac.ni.pmf.marko.web.exception.BadRequestException;
 import rs.ac.ni.pmf.marko.web.exception.DuplicateResourceException;
 import rs.ac.ni.pmf.marko.web.exception.ErrorInfo.ResourceType;
 import rs.ac.ni.pmf.marko.web.exception.ResourceNotFoundException;
@@ -41,7 +43,9 @@ public class UsersService {
 
 	private final UsersRepository usersRepository;
 	private final UsersMapper usersMapper;
-	private final EntityManagerFactory entityManagerFactory;
+
+	@PersistenceContext
+	private EntityManager entityManager;
 
 	/**
 	 * Get the list of all users that satisfy the given conditions
@@ -54,7 +58,8 @@ public class UsersService {
 		final PageRequest pageRequest;
 
 		if (searchOptions.getPage() != null) {
-			pageRequest = PageRequest.of(searchOptions.getPage(), searchOptions.getSize() != null ? searchOptions.getSize() : DEFAULT_PAGE_SIZE);
+			pageRequest = PageRequest.of(searchOptions.getPage(),
+					searchOptions.getSize() != null ? searchOptions.getSize() : DEFAULT_PAGE_SIZE);
 		}
 		else {
 			pageRequest = PageRequest.of(0, Integer.MAX_VALUE);
@@ -67,12 +72,17 @@ public class UsersService {
 
 	public UserDTO getUser(final String username) throws ResourceNotFoundException {
 		final UserEntity userEntity = usersRepository.findById(username)
-				.orElseThrow(() -> new ResourceNotFoundException(ResourceType.USER, "User with username '" + username + "' does not exist"));
+				.orElseThrow(
+						() -> new ResourceNotFoundException(ResourceType.USER, "User with username '" + username + "' does not exist"));
 
 		return usersMapper.toDto(userEntity);
 	}
 
-	public UserDTO addUser(final UserDTO userDto) throws DuplicateResourceException {
+	public UserDTO addUser(final UserDTO userDto) throws DuplicateResourceException, BadRequestException {
+		if (userDto.getPassword() == null || userDto.getPassword().isEmpty()) {
+			throw new BadRequestException("Password must be provided!");
+		}
+
 		final String username = userDto.getUsername();
 
 		if (usersRepository.existsById(username)) {
@@ -94,7 +104,7 @@ public class UsersService {
 
 	public List<UserTicketLiteDTO> getTicketsLite(final String username) {
 
-		final CriteriaBuilder cb = entityManagerFactory.getCriteriaBuilder();
+		final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 
 		final CriteriaQuery<UserTicketLiteDTO> cq = cb.createQuery(UserTicketLiteDTO.class);
 
@@ -112,12 +122,12 @@ public class UsersService {
 		cq.where(predicates.toArray(new Predicate[predicates.size()]));
 //		cq.where(cb.equal(usernamePath, username));
 
-		return entityManagerFactory.createEntityManager().createQuery(cq).getResultList();
+		return entityManager.createQuery(cq).getResultList();
 	}
 
 	public long countMessages(String username) {
 
-		final CriteriaBuilder cb = entityManagerFactory.getCriteriaBuilder();
+		final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		final CriteriaQuery<Long> cq = cb.createQuery(Long.class);
 
 		final Root<MessageEntity> root = cq.from(MessageEntity.class);
@@ -128,6 +138,6 @@ public class UsersService {
 		cq.select(cb.count(root));
 		cq.where(cb.equal(usernamePath, username));
 
-		return entityManagerFactory.createEntityManager().createQuery(cq).getSingleResult();
+		return entityManager.createQuery(cq).getSingleResult();
 	}
 }

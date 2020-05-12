@@ -8,19 +8,20 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import lombok.extern.slf4j.Slf4j;
-import rs.ac.ni.pmf.marko.web.config.PersistenceConfiguration;
+import rs.ac.ni.pmf.marko.web.TestDatabaseConfiguration;
 import rs.ac.ni.pmf.marko.web.model.UsersSearchOptions;
 import rs.ac.ni.pmf.marko.web.model.entity.TicketEntity;
 import rs.ac.ni.pmf.marko.web.model.entity.UserEntity;
 import rs.ac.ni.pmf.marko.web.repository.specification.UsersSearchSpecification;
 
 @RunWith(SpringRunner.class)
-//@ContextConfiguration(classes = { TestDatabaseConfiguration.class })
-@ContextConfiguration(classes = { PersistenceConfiguration.class, UsersRepository.class, TicketsRepository.class })
+@ContextConfiguration(classes = { TestDatabaseConfiguration.class })
+//@ContextConfiguration(classes = { PersistenceConfiguration.class, UsersRepository.class, TicketsRepository.class })
 @Slf4j
 public class UsersRepositoryTest {
 
@@ -29,6 +30,9 @@ public class UsersRepositoryTest {
 	
 	@Autowired
 	private TicketsRepository ticketsRepository;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	@Before
 	public void initializeData() {
@@ -40,6 +44,7 @@ public class UsersRepositoryTest {
 				.firstName("Marko")
 				.lastName("Milosevic")
 				.username("markom")
+				.password(passwordEncoder.encode("markom"))
 				.build();
 		
 		usersRepository.save(user1);
@@ -48,6 +53,7 @@ public class UsersRepositoryTest {
 				.firstName("Mika")
 				.lastName("Mikic")
 				.username("mika")
+				.password(passwordEncoder.encode("mika"))
 				.build();
 		
 		final UserEntity savedUser2 = usersRepository.save(user2);

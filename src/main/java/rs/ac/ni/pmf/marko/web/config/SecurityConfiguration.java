@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -27,35 +26,40 @@ import rs.ac.ni.pmf.marko.web.exception.ErrorInfo.ResourceType;
 @Slf4j
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	private PasswordEncoder passwordEncoder;
+//	@Autowired
+//	private PasswordEncoder passwordEncoder;
 
 	@Autowired
 	private ObjectMapper objectMapper;
+	
+//	@Autowired
+//	private UserDetailsService userDetailsService;
 
 	@Bean(name = "passwordEncoder")
 	public PasswordEncoder getPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		//@formatter:off
-		auth.inMemoryAuthentication()
-				.passwordEncoder(passwordEncoder)
-				.withUser("user")
-					.password(passwordEncoder.encode("user"))
-					.roles("USER")
-				.and()
-					.withUser("mod")
-						.password(passwordEncoder.encode("mod"))
-						.roles("MOD", "USER")					
-				.and()
-				.withUser("admin")
-					.password(passwordEncoder.encode("admin"))
-					.roles("ADMIN", "USER");
-		//@formatter:on
-	}
+//	@Override
+//	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//		//@formatter:off
+//		auth.inMemoryAuthentication()
+//				.passwordEncoder(passwordEncoder)
+//				.withUser("user")
+//					.password(passwordEncoder.encode("user"))
+//					.roles("USER")
+//				.and()
+//					.withUser("mod")
+//						.password(passwordEncoder.encode("mod"))
+//						.roles("MOD", "USER")					
+//				.and()
+//				.withUser("admin")
+//					.password(passwordEncoder.encode("admin"))
+//					.roles("ADMIN", "USER");
+//		//@formatter:on
+		
+//		log.info("Pass:{}", passwordEncoder.encode("mod"));
+//	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {

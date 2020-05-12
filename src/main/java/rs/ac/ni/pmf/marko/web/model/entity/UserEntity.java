@@ -26,12 +26,15 @@ public class UserEntity {
 
 	@Id
 	private String username;
-	
+
 	@Column(name = "first_name")
 	private String firstName;
-	
+
 	@Column(name = "last_name")
 	private String lastName;
+
+	@Column(name = "password", columnDefinition = "varchar(255) default 'test'", nullable = false)
+	private String password;
 
 	@Builder.Default
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")

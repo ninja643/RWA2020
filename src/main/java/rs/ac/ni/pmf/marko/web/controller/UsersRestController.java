@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import rs.ac.ni.pmf.marko.web.exception.BadRequestException;
 import rs.ac.ni.pmf.marko.web.exception.DuplicateResourceException;
 import rs.ac.ni.pmf.marko.web.model.api.UserDTO;
 import rs.ac.ni.pmf.marko.web.model.api.UserTicketLiteDTO;
@@ -36,5 +37,5 @@ public interface UsersRestController {
 	long getMessagesCount(@PathVariable(name = "username") final String username);
 
 	@PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
-	UserDTO addUser(@RequestBody final UserDTO user) throws DuplicateResourceException;
+	UserDTO addUser(@RequestBody final UserDTO user) throws DuplicateResourceException, BadRequestException;
 }
