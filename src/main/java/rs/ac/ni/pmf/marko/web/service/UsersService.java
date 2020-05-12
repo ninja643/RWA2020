@@ -3,7 +3,8 @@ package rs.ac.ni.pmf.marko.web.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
@@ -12,7 +13,6 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -42,8 +42,10 @@ public class UsersService {
 
 	private final UsersRepository usersRepository;
 	private final UsersMapper usersMapper;
-	private final EntityManagerFactory entityManagerFactory;
 
+	@PersistenceContext
+	private EntityManager entityManager;
+	
 	/**
 	 * Get the list of all users that satisfy the given conditions
 	 * 
@@ -95,7 +97,7 @@ public class UsersService {
 
 	public List<UserTicketLiteDTO> getTicketsLite(final String username) {
 
-		final CriteriaBuilder cb = entityManagerFactory.getCriteriaBuilder();
+		final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 
 		final CriteriaQuery<UserTicketLiteDTO> cq = cb.createQuery(UserTicketLiteDTO.class);
 
@@ -113,12 +115,12 @@ public class UsersService {
 		cq.where(predicates.toArray(new Predicate[predicates.size()]));
 //		cq.where(cb.equal(usernamePath, username));
 
-		return entityManagerFactory.createEntityManager().createQuery(cq).getResultList();
+		return entityManager.createQuery(cq).getResultList();
 	}
 
 	public long countMessages(String username) {
 
-		final CriteriaBuilder cb = entityManagerFactory.getCriteriaBuilder();
+		final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		final CriteriaQuery<Long> cq = cb.createQuery(Long.class);
 
 		final Root<MessageEntity> root = cq.from(MessageEntity.class);
@@ -129,6 +131,6 @@ public class UsersService {
 		cq.select(cb.count(root));
 		cq.where(cb.equal(usernamePath, username));
 
-		return entityManagerFactory.createEntityManager().createQuery(cq).getSingleResult();
+		return entityManager.createQuery(cq).getSingleResult();
 	}
 }
