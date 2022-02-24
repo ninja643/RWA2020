@@ -18,6 +18,8 @@ public class OptionalDemo {
 
 	private static final List<Pair> elements = Arrays.asList(new Pair(1, 2), new Pair(1, 3), new Pair(3, 4));
 
+	private Integer field = 10;
+
 	public Optional<Pair> findPair(final int a, final List<Pair> pairs) {
 		for (final Pair pair : pairs) {
 			if (pair.getA() == a) {
