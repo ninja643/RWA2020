@@ -16,7 +16,7 @@ public class OptionalDemo {
 		int b;
 	}
 
-	private static List<Pair> elements = Arrays.asList(new Pair(1, 2), new Pair(1, 3), new Pair(3, 4));
+	private static final List<Pair> elements = Arrays.asList(new Pair(1, 2), new Pair(1, 3), new Pair(3, 4));
 
 	public Optional<Pair> findPair(final int a, final List<Pair> pairs) {
 		for (final Pair pair : pairs) {
